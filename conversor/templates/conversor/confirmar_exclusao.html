@@ -1,0 +1,19 @@
+{% extends 'conversor/base.html' %}
+{% block titulo %}Excluir {{ doc.nome }}{% endblock %}
+
+{% block conteudo %}
+<h1>Excluir documento</h1>
+<p class="subtitle">Esta ação não pode ser desfeita.</p>
+
+<div class="card">
+  <p style="margin-bottom:1.25rem;">
+    Tem certeza que deseja excluir <strong>{{ doc.nome }}</strong>?<br>
+    <span class="meta">O arquivo PDF e o texto no banco serão removidos permanentemente.</span>
+  </p>
+  <form method="post" style="display:flex; gap:.75rem;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, excluir</button>
+    <a href="{% url 'detalhe' doc.pk %}" class="btn btn-ghost">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

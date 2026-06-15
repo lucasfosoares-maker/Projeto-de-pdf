@@ -1,0 +1,55 @@
+{% extends 'conversor/base.html' %}
+{% block titulo %}Documentos{% endblock %}
+
+{% block conteudo %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+  <div>
+    <h1>Documentos</h1>
+    <p class="subtitle">Todos os PDFs convertidos e salvos no banco.</p>
+  </div>
+  <a href="{% url 'upload' %}" class="btn btn-primary">+ Novo PDF</a>
+</div>
+
+<div class="card" style="padding:0; overflow:hidden;">
+  {% if documentos %}
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nome</th>
+        <th>Enviado em</th>
+        <th>Tamanho</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documentos %}
+      <tr>
+        <td class="meta">{{ doc.pk }}</td>
+        <td>
+          <a href="{% url 'detalhe' doc.pk %}" style="color:var(--accent2); text-decoration:none; font-weight:500;">
+            {{ doc.nome }}
+          </a>
+        </td>
+        <td class="meta">{{ doc.criado_em|date:"d/m/Y H:i" }}</td>
+        <td><span class="badge badge-purple">{{ doc.conteudo|length|filesizeformat }}</span></td>
+        <td>
+          <div class="actions">
+            <a href="{% url 'detalhe' doc.pk %}"   class="btn btn-ghost"    style="padding:.3rem .8rem">Ver</a>
+            <a href="{% url 'baixar_txt' doc.pk %}" class="btn btn-success"  style="padding:.3rem .8rem">TXT</a>
+            <a href="{% url 'excluir' doc.pk %}"    class="btn btn-danger"   style="padding:.3rem .8rem">🗑</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p style="font-size:2rem; margin-bottom:.5rem;">📂</p>
+    <p>Nenhum documento ainda.</p>
+    <a href="{% url 'upload' %}" style="color:var(--accent2);">Converter o primeiro PDF →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

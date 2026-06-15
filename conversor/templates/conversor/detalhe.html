@@ -1,0 +1,21 @@
+{% extends 'conversor/base.html' %}
+{% block titulo %}{{ doc.nome }}{% endblock %}
+
+{% block conteudo %}
+<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+  <div>
+    <h1 style="word-break:break-all;">{{ doc.nome }}</h1>
+    <p class="meta">ID #{{ doc.pk }} · {{ doc.criado_em|date:"d/m/Y H:i" }}</p>
+  </div>
+  <div class="actions">
+    <a href="{% url 'baixar_txt' doc.pk %}" class="btn btn-success">⬇ Baixar .txt</a>
+    <a href="{% url 'lista' %}" class="btn btn-ghost">← Documentos</a>
+    <a href="{% url 'excluir' doc.pk %}" class="btn btn-danger">🗑 Excluir</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Texto extraído</h2>
+  <div class="content-box">{{ doc.conteudo }}</div>
+</div>
+{% endblock %}

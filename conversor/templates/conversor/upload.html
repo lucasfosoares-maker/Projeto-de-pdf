@@ -1,0 +1,60 @@
+{% extends 'conversor/base.html' %}
+{% block titulo %}Converter PDF{% endblock %}
+
+{% block conteudo %}
+<h1>Converter PDF</h1>
+<p class="subtitle">Envie um PDF para extrair o texto e armazenar no banco de dados.</p>
+
+{% if erro %}
+  <div class="alert alert-error">⚠ {{ erro }}</div>
+{% endif %}
+
+<div class="card">
+  <form method="post" enctype="multipart/form-data" id="form-upload">
+    {% csrf_token %}
+
+    <div class="upload-zone" id="drop-zone" onclick="document.getElementById('pdf-input').click()">
+      <input type="file" id="pdf-input" name="pdf" accept=".pdf">
+      <div class="upload-icon">📄</div>
+      <p class="upload-label">
+        Arraste o arquivo aqui ou <strong>clique para escolher</strong>
+      </p>
+      <p class="upload-label" style="margin-top:.4rem;font-size:.8rem;">Somente arquivos .pdf</p>
+      <p class="file-chosen" id="nome-arquivo" style="display:none"></p>
+    </div>
+
+    <div style="margin-top:1.5rem; display:flex; gap:.75rem; align-items:center;">
+      <button type="submit" class="btn btn-primary">▶ Converter e salvar</button>
+      <a href="{% url 'lista' %}" class="btn btn-ghost">Ver documentos</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  const input = document.getElementById('pdf-input');
+  const label = document.getElementById('nome-arquivo');
+  const zone  = document.getElementById('drop-zone');
+
+  input.addEventListener('change', () => {
+    if (input.files.length) {
+      label.textContent = '✔ ' + input.files[0].name;
+      label.style.display = 'block';
+    }
+  });
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag');
+    const files = e.dataTransfer.files;
+    if (files.length && files[0].name.endsWith('.pdf')) {
+      const dt = new DataTransfer();
+      dt.items.add(files[0]);
+      input.files = dt.files;
+      label.textContent = '✔ ' + files[0].name;
+      label.style.display = 'block';
+    }
+  });
+</script>
+{% endblock %}
