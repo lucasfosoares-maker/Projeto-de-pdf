@@ -1,2 +1,6 @@
-django>=4.2
-pypdf>=4.0
+asgiref==3.11.1
+Django==6.0.6
+gunicorn==26.0.0
+packaging==26.2
+pypdf==6.13.2
+sqlparse==0.5.5
